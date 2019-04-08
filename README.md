@@ -27,16 +27,16 @@ $ export BUCKET_NAME=<SFTP-BUCKET-NAME>
 
 **Note:** It is assumed that you are running MacOS and using [homebrew](https://brew.sh/) for installing packages.
 
-### Execution
+## Run the script
 
 ```shell
 $ python3 shipup-s3-transfer.py
 ```
 
-## Potential Improvements
+### Potential Improvements
 
 * Change the script into an ansible playbook
 
-## Built With
+### Built With
 
-* [Python3](https://www.python.org/download/releases/3.0/) - The programming language used
+* [Python 3](https://www.python.org/download/releases/3.0/) - The programming language used
