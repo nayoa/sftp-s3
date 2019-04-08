@@ -3,6 +3,10 @@ import pysftp
 import sys
 import fnmatch
 import datetime
+import boto3
+
+today = datetime.date.today()
+file_pattern = f"*{today}*"
 
 def connect_to_sftp():
 
@@ -10,40 +14,58 @@ def connect_to_sftp():
     username = os.environ['USER']
     password = os.environ['PASS']
 
-    today = datetime.date.today()
-
-    file_pattern = f"*{today}*"
-
     print('Connecting to Shipup SFTP server')
+    global sftp
     sftp = pysftp.Connection(host=hostname, username=username, password=password)
 
     print('Established connection to SFTP server')
         
-def get_csv_files():
+def get_csv_files(sftp):
 
     print('Retrieving new csv files')
     with sftp.cd('reports'):
-
+        global filenames
         for filenames in sftp.listdir():
             if fnmatch.fnmatch(filenames, file_pattern):
-                print(filesnames)
+                print(filenames)
         
         if sftp.exists(filenames) == True:
             sftp.get(filenames)
-            print("csv files copied successfully")
+            print("CSV files copied")
+            upload_file_to_s3(filenames)
         else:
-            print("New csv files do not exist")
+            print("New CSV files do not exist")
+            sftp.close()
 
 
-    sftp.close()
+def upload_file_to_s3(filenames):
+
+    bucketName = os.environ['BUCKET_NAME']
+    s3 = boto3.resource('s3')
+    s3.meta.client.upload_file(filenames, bucketName, filenames)
+
+    print("Copied to S3 Succesfully")
+    return True
+
+
+def archive(sftp, filenames):
+
+    if upload_file_to_s3(filenames):
+        sftp.rename(filenames, archive)
+        print("Move CSV files to Archive")
+        sftp.close()
+
+def cleanup(filenames):
+
+    if os.path.exists(filenames):
+        os.remove(filenames)
+        print("Clean up complete")
+    else:
+        print("Nothing to clean up")
+
+
 
 connect_to_sftp()
-get_csv_files()
-
-
-# def upload_file_to_s3():
-
-
-
-
-# def archive():
+get_csv_files(sftp)
+# cleanup(filenames)
+# archive(sftp, filenames)
