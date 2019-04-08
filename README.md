@@ -1,59 +1,42 @@
-# SFTP Transfer to S3
+# Shipup SFTP Transfer to S3
 
+This repository contains a Python 3 script that connects to the shipup SFTP server and copies the latest CSV files to an AWS S3 bucket. It searches CSV files by date and archives the files on the SFTP server once the transfer to S3 is complete. It also cleans up the local CSV files.
 
-## Getting Started
+## Why
 
+[shipup](https://www.shipup.co/) sends daily reports in CSV format to an SFTP server. We then want to analyse the reports in Big Query. In order to do this, the reports are sent to AWS S3 where a FiveTran Connection is set up to forward the data to Big Query. This repository automates the process of sending the reports to Amazon S3 and uses a Jenkinsfile to schedule the script to run at 2 am.
 
 ### Prerequisites
 
-What things you need to install the software and how to install them
+Install and export the below dependencies to run the script locally:
 
-```
-Give examples
-```
-
-### Installing
-
-A step by step series of examples that tell you how to get a development env running
-
-Say what the step will be
-
-```
-Give the example
+```shell
+$ brew install python
+$ curl https://bootstrap.pypa.io/get-pip.py -o get-pip.py
+$ sudo python3 get-pip.py
+$ pip3 install -r requirements
 ```
 
-And repeat
-
-```
-until finished
-```
-
-End with an example of getting some data out of the system or using it for a little demo
-
-## Running the tests
-
-Explain how to run the automated tests for this system
-
-### Break down into end to end tests
-
-Explain what these tests test and why
-
-```
-Give an example
+```shell 
+# Change the environment variables to match the SFTP server and AWS S3 bucket of choice.
+$ export USER=<SFTP-USERNAME>
+$ export PASS=<SFTP-PASSWORD>
+$ export HOST=<SFTP-HOST>
+$ export BUCKET_NAME=<SFTP-BUCKET-NAME>
 ```
 
-### And coding style tests
+**Note:** It is assumed that you are running MacOS and using [homebrew](https://brew.sh/) for installing packages.
 
-Explain what these tests test and why
+### Execution
 
+```shell
+$ python3 shipup-s3-transfer.py
 ```
-Give an example
-```
 
-## Deployment
+## Potential Improvements
 
-Th
+* Change the script into an ansible playbook
 
 ## Built With
 
-* [Dropwizard](http://www.dropwizard.io/1.0.2/docs/) - The web framework used
+* [Python3](https://www.python.org/download/releases/3.0/) - The programming language used
