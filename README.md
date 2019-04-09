@@ -1,6 +1,6 @@
 # Shipup SFTP Transfer to S3
 
-This repository contains a Python 3 script that connects to the shipup SFTP server and copies the latest CSV files to an AWS S3 bucket. It searches CSV files by date and archives the files on the SFTP server once the transfer to S3 is complete. It also cleans up the local CSV files.
+This repository contains a Python 3 script that connects to the shipup SFTP server and copies the latest CSV reports (France and UK) to an AWS S3 bucket. It searches CSV reports by date and archives the files on the SFTP server once the transfer to S3 is complete. It also cleans up the local CSV reports.
 
 ## Why
 
@@ -12,9 +12,10 @@ Install and export the below dependencies to run the script locally:
 
 ```shell
 $ brew install python
+$ brew install awscli
 $ curl https://bootstrap.pypa.io/get-pip.py -o get-pip.py
 $ sudo python3 get-pip.py
-$ pip3 install -r requirements
+$ pip3 install -r requirements.txt
 ```
 
 ```shell 
@@ -23,6 +24,30 @@ $ export USER=<SFTP-USERNAME>
 $ export PASS=<SFTP-PASSWORD>
 $ export HOST=<SFTP-HOST>
 $ export BUCKET_NAME=<SFTP-BUCKET-NAME>
+```
+
+Have programmatic access to Eve's AWS account (currently Production)
+
+Export your `AWS_ACCESS_KEY_ID` and `AWS_SECRET_ACCESS_KEY` of the AWS account you want to upload the CSV reports to.
+
+**OR**
+
+Ensure your credentials are in your `~/.aws/credentials` file.
+
+If they're not, you can add them by doing:
+
+```shell
+$ aws configure
+AWS Access Key ID []: <enter-aws-access-key>
+AWS Secret Access Key []: <enter-aws-secret-key>
+Default region name []: <enter-region-id> # https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/using-regions-availability-zones.html#concepts-available-regions
+Default output format []: <leave-blank>
+```
+
+You can then check your CLI is using the correct credentials by doing:
+
+```shell
+$ aws sts get-caller-identity
 ```
 
 **Note:** It is assumed that you are running MacOS and using [homebrew](https://brew.sh/) for installing packages.
@@ -35,8 +60,12 @@ $ python3 shipup-s3-transfer.py
 
 ### Potential Improvements
 
+* Unit tests
+* Improve quality of Python code. e.g. Remove global variables and add classes
 * Change the script into an ansible playbook
 
 ### Built With
 
 * [Python 3](https://www.python.org/download/releases/3.0/) - The programming language used
+* [Pysftp] - Module/Library used to connect to SFTP and download reports
+* [Boto3] - Module/Library used to connect to AWS and upload reports to S3
