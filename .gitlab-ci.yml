@@ -1,0 +1,23 @@
+image: python:3.6-alpine
+
+stages:
+  - test
+  - deploy
+
+before_script:
+  - pip install -r requirements.txt
+
+python_lint:
+  stage: test
+  script:
+    - pylint shipup-s3-transfer.py
+
+run_transfer_s3:
+  stage: deploy
+  variables:
+    USER: $SFTP_USERNAME
+    PASS: $SFTP_PASSWORD
+    HOST: $SFTP_HOST
+    BUCKET_NAME: $S3_BUCKET_DESTINATION
+  script:
+    - python3 shipup-s3-transfer.py
