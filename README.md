@@ -1,10 +1,10 @@
 # Shipup SFTP Transfer to S3
 
-This repository contains a Python 3 script that connects to the shipup SFTP server and copies the latest CSV reports (France and UK) to an AWS S3 bucket. It searches CSV reports by date and archives the files on the SFTP server once the transfer to S3 is complete. It also cleans up the local CSV reports.
+This repository contains a Python 3 script that connects to the shipup SFTP server and copies the latest CSV reports (France and UK) to an AWS S3 bucket. It grabs the latest CSV reports and archives the files on the SFTP server once the transfer to S3 is complete. It also cleans up the local CSV reports.
 
 ## Why
 
-[shipup](https://www.shipup.co/) sends daily reports in CSV format to an SFTP server. We then want to analyse the reports in Big Query. In order to do this, the reports are sent to AWS S3 where a FiveTran Connection is set up to forward the data to Big Query. This repository automates the process of sending the reports to Amazon S3 and uses a Jenkinsfile to schedule the script to run at 2 am.
+[shipup](https://www.shipup.co/) sends daily reports in CSV format to an SFTP server. We then want to analyse the reports in Big Query. In order to do this, the reports are sent to AWS S3 where a FiveTran Connection is set up to forward the data to Big Query. This repository automates the process of sending the reports to Amazon S3 and uses [gitlab-ci](.gitlab-ci.yml) to schedule the script to run at 2 am.
 
 ### Prerequisites
 
@@ -18,13 +18,15 @@ $ sudo python3 get-pip.py
 $ pip3 install -r requirements.txt
 ```
 
-```shell 
+```shell
 # Change the environment variables to match the SFTP server and AWS S3 bucket of choice.
 $ export USER=<SFTP-USERNAME>
 $ export PASS=<SFTP-PASSWORD>
 $ export HOST=<SFTP-HOST>
 $ export BUCKET_NAME=<SFTP-BUCKET-NAME>
 ```
+
+**Note:** It is assumed that you are running MacOS and using [homebrew](https://brew.sh/) for installing packages.
 
 Have programmatic access to Eve's AWS account (currently Production)
 
@@ -50,8 +52,6 @@ You can then check your CLI is using the correct credentials by doing:
 $ aws sts get-caller-identity
 ```
 
-**Note:** It is assumed that you are running MacOS and using [homebrew](https://brew.sh/) for installing packages.
-
 ## Run the script
 
 ```shell
@@ -61,11 +61,11 @@ $ python3 shipup-s3-transfer.py
 ### Potential Improvements
 
 * Unit tests
-* Improve quality of Python code. e.g. Remove global variables and add classes
+* Improve the quality of Python code. e.g. Remove global variables, add classes and use different modules
 * Change the script into an ansible playbook
 
 ### Built With
 
 * [Python 3](https://www.python.org/download/releases/3.0/) - The programming language used
-* [Pysftp] - Module/Library used to connect to SFTP and download reports
-* [Boto3] - Module/Library used to connect to AWS and upload reports to S3
+* [Pysftp](https://pysftp.readthedocs.io/en/release_0.2.9/) - Module/Library used to connect to SFTP and download reports
+* [Boto3](https://boto3.amazonaws.com/v1/documentation/api/latest/index.html) - Module/Library used to connect to AWS and upload reports to S3
