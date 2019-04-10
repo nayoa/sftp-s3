@@ -49,4 +49,3 @@ run_transfer_s3:
 
 after_script:
   - rm ~/.ssh/id_rsa
-  - 
