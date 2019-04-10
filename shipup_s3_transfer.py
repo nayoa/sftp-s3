@@ -98,6 +98,7 @@ def upload_file_to_s3(directory):
     except ValueError as err:
         print("Unable to copy reports to S3")
         print(err.args)
+        cleanup(directory)
 
 
 def cleanup(directory):
