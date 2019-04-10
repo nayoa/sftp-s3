@@ -51,7 +51,7 @@ def connect_to_sftp(directory):
     password = os.environ['PASS']
 
     print('Connecting to Shipup SFTP server')
-    sftp = pysftp.Connection(host=hostname, username=username, password=password)
+    sftp = pysftp.Connection(hostname, username=username, password=password)
 
     print('Established connection to SFTP server')
 
@@ -122,7 +122,7 @@ def archive(sftp):
         for filename in sftp.listdir('reports'):
             new_path = 'archive' + '/' + filename
             sftp.rename(filename, new_path)
-            print("Move CSV files to Archive")
+            print("Moved CSV reports to archive")
             sftp.close()
     except ValueError as err:
         print("Unable to archive")
