@@ -51,7 +51,7 @@ def connect_to_sftp(directory):
     password = os.environ['PASS']
 
     print('Connecting to Shipup SFTP server')
-    sftp = pysftp.Connection(hostname, username=username, password=password)
+    sftp = pysftp.Connection(hostname, username=username, password=password, private_key='~/.ssh/id_rsa')
 
     print('Established connection to SFTP server')
 
