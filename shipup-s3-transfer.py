@@ -6,9 +6,11 @@ import boto3
 def main():
     """
     Create directory using variable to temporarily store CSV reports
+
+    Kick off script
     """
-    global directory 
-    directory = "transfer"
+
+    directory = 'transfer'
 
     try:
         os.mkdir(directory)
@@ -16,7 +18,10 @@ def main():
     except FileExistsError:
         print(directory, "directory already exists")
 
-def connect_to_sftp():
+    connect_to_sftp(directory)
+
+
+def connect_to_sftp(directory):
     """
     Connects to sftp server using local environment variables
     """ 
@@ -26,10 +31,12 @@ def connect_to_sftp():
     password = os.environ['PASS']
 
     print('Connecting to Shipup SFTP server')
-    global sftp
     sftp = pysftp.Connection(host=hostname, username=username, password=password)
 
     print('Established connection to SFTP server')
+
+    get_csv_files(sftp, directory)
+
         
 def get_csv_files(sftp, directory):
     """
@@ -59,7 +66,6 @@ def upload_file_to_s3(directory):
 
     bucket = os.environ['BUCKET_NAME']
     s3_connect = boto3.client('s3')
-
     local_path = os.getcwd() # Get current working directory
 
     try:
@@ -68,13 +74,13 @@ def upload_file_to_s3(directory):
             local_name = local_path + '/' + directory + '/' + filename
             s3_connect.upload_file(local_name, bucket, file_key_name)
         print("Copied reports to S3 Succesfully")
-        print(file_key_name)
-        cleanup()
+        cleanup(directory)
     except ValueError as err:
         print("Unable to copy reports to S3")
         print(err.args)
 
-def cleanup():
+
+def cleanup(directory):
     """
     Remove local directory with CSV reports
     """
@@ -88,10 +94,9 @@ def cleanup():
 
 
 # def archive(sftp):]
-        """
-        Archive reports copied to S3 on SFTP server
-        """
-
+        # """
+        # Archive reports copied to S3 on SFTP server
+        # """
 #     for filename in sftp.listdir('reports'):
 #         new_path = 'archive' + '/' + filename
 #         sftp.rename(filename, new_path)
@@ -100,7 +105,5 @@ def cleanup():
 #     else: 
 #         print("Unable to archive")
 
-
-connect_to_sftp()
-get_csv_files(sftp, directory)
 # archive(sftp)
+main()
