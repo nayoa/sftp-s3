@@ -51,7 +51,6 @@ def connect_to_sftp(directory):
     password = os.environ['PASS']
 
     print('Connecting to Shipup SFTP server')
-
     sftp = pysftp.Connection(hostname, username=username, password=password)
 
     print('Established connection to SFTP server')
@@ -99,6 +98,7 @@ def upload_file_to_s3(directory):
     except ValueError as err:
         print("Unable to copy reports to S3")
         print(err.args)
+        cleanup(directory)
 
 
 def cleanup(directory):
