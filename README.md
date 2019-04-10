@@ -10,15 +10,58 @@ This repository contains a Python 3 script that connects to the shipup SFTP serv
 
 ### Prerequisites
 
-Install and export the below dependencies to run the script locally:
+**Note:** 
+
+* It is assumed that you are running MacOS and using [homebrew](https://brew.sh/) for installing packages.
+* If you are using [zsh](https://ohmyz.sh/), echo the path and copy the virtualenv configuratrion into `~/.zshrc` instead of `~/.bashrc`.
+
+Install brew dependencies:
+
+* `$ brew list` shows what you already have installed.
 
 ```shell
+$ brew update && brew upgrade
+$ brew doctor
+Your system is ready to brew.
 $ brew install python
 $ brew install awscli
+```
+
+Install the required pip packages:
+
+```shell
 $ curl https://bootstrap.pypa.io/get-pip.py -o get-pip.py
 $ sudo python3 get-pip.py
-$ pip3 install -r requirements.txt
 ```
+
+Set Python3 as a default version of Python:
+
+```shell
+$ echo 'export PATH="/usr/local/opt/python/libexec/bin:/usr/local/sbin:$PATH"' >> ~/.bashrc
+```
+
+Install virtualenvwrapper:
+
+```shell
+$ pip install virtualenv
+$ pip install virtualenvwrapper
+```
+
+Add virtualenvwrapper to shell startup file (~/.bashrc):
+
+```
+export WORKON_HOME=$HOME/.virtualenvs
+export PROJECT_HOME=$HOME/Devel
+source /usr/local/bin/virtualenvwrapper.sh
+```
+
+Install pip requirements:
+
+```shell
+$ pip install -r requirements.txt
+```
+
+Export required environment variables:
 
 ```shell
 # Change the environment variables to match the SFTP server and AWS S3 bucket of choice.
@@ -28,7 +71,6 @@ $ export HOST=<SFTP-HOST>
 $ export BUCKET_NAME=<SFTP-BUCKET-NAME>
 ```
 
-**Note:** It is assumed that you are running MacOS and using [homebrew](https://brew.sh/) for installing packages.
 
 Have programmatic access to Eve's AWS account (currently Production)
 
@@ -54,10 +96,16 @@ You can then check your CLI is using the correct credentials by doing:
 $ aws sts get-caller-identity
 ```
 
+## Run the tests
+
+```shell
+$ pylint shipup_s3_transfer.py
+```
+
 ## Run the script
 
 ```shell
-$ python3 shipup-s3-transfer.py
+$ python3 shipup_s3_transfer.py
 ```
 
 ### Potential Improvements
@@ -65,7 +113,6 @@ $ python3 shipup-s3-transfer.py
 * Unit tests
 * Improve the quality of Python code. e.g. Remove add classes and use different modules
 * Change the script into an ansible playbook
-* Cache pip packages
 * Create a custom docker base image with alpine packages and pip packages already instealled
 
 ### Built With
