@@ -1,22 +1,24 @@
 image: python:3.6-alpine
 
+
+variables:
+    PIP_CACHE_DIR: "$CI_PROJECT_DIR/.cache/pip"
+
+cache:
+  paths:
+    - .cache/pip
+
 stages:
   - test
   - deploy
 
 before_script:
-  - apk update
-  - apk add build-base
-  - apk add libffi-dev
-  - apk add openssl-dev
-  - apk add openssh-client
-  - pip install -r requirements.txt
-  - eval $(ssh-agent -s)
-  - echo "$SSH_PRIVATE_KEY" | base64 -d > /dev/null
+  - apk update && apk upgrade
+  - apk add --no-cache build-base libffi-dev openssl-dev openssh
   - mkdir -p ~/.ssh
-  - chmod 700 ~/.ssh
   - ssh-keyscan gitlab.com >> ~/.ssh/known_hosts
-  - chmod 644 ~/.ssh/known_hosts
+  - (umask  077 ; echo $SSH_PRIVATE_KEY | base64 -d > ~/.ssh/id_rsa)
+  - pip install -r requirements.txt
 
 python_lint:
   # only:
