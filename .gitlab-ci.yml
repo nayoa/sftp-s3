@@ -5,6 +5,7 @@ stages:
   - deploy
 
 before_script:
+  - aws s3 ls
   - apk update && apk upgrade
   - apk add --no-cache build-base libffi-dev openssl-dev openssh
   - mkdir -p ~/.ssh
@@ -12,6 +13,15 @@ before_script:
   - cat ~/.ssh/known_hosts
   - (umask  077 ; echo $SSH_PRIVATE_KEY | base64 -d > ~/.ssh/id_rsa)
   - pip install -r requirements.txt
+  - aws --version
+  - aws s3 ls
+
+variables:
+  PIP_CACHE_DIR: "pip-cache"
+
+cache:
+  paths:
+    - pip-cache
 
 python_lint:
   # only:
@@ -35,3 +45,8 @@ run_transfer_s3:
     BUCKET_NAME: $S3_BUCKET_DESTINATION
   script:
     - python3 shipup_s3_transfer.py
+
+
+after_script:
+  - rm ~/.ssh/id_rsa
+  - 
