@@ -1,3 +1,22 @@
+"""
+Transfer files from SFTP server to AWS S3
+
+The functions do the below:
+
+* Create a directory to store CSV reports
+* Connects to an SFTP server
+* Copies every file (not directory) in the 'reports' folder and copies to directory created in the main() function
+* Uploads all the files to AWS S3
+* Delete the local copy of the directory created in the main() function
+* Moves files on SFTP server to archive folder once copied to S3
+
+Note: The script requires local environment variables:
+
+* HOST
+* USER
+* PASS
+* BUCKET_NAME
+"""
 import os
 import shutil
 import pysftp
@@ -97,12 +116,15 @@ def archive(sftp):
     """
     Archive reports copied to S3 on SFTP server
     """
-    for filename in sftp.listdir('reports'):
-        new_path = 'archive' + '/' + filename
-        sftp.rename(filename, new_path)
-        print("Move CSV files to Archive")
-        sftp.close()
-    else:
+
+    try:
+        for filename in sftp.listdir('reports'):
+            new_path = 'archive' + '/' + filename
+            sftp.rename(filename, new_path)
+            print("Move CSV files to Archive")
+            sftp.close()
+    except ValueError as err:
         print("Unable to archive")
+        print(err.args)
 
 main()
