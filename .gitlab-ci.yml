@@ -1,14 +1,26 @@
 image: python:3.6-alpine
 
+cache:
+  paths:
+    - .cache/pip
+
 stages:
   - test
   - deploy
 
 before_script:
+  - apk update
   - apk add build-base
   - apk add libffi-dev
   - apk add openssl-dev
+  - apk add openssh-client
   - pip install -r requirements.txt
+  - eval $(ssh-agent -s)
+  - echo "$SSH_PRIVATE_KEY" | base64 -D > /dev/null
+  - mkdir -p ~/.ssh
+  - chmod 700 ~/.ssh
+  - ssh-keyscan gitlab.com >> ~/.ssh/known_hosts
+  - chmod 644 ~/.ssh/known_hosts
 
 python_lint:
   only:
