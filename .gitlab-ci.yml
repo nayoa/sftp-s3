@@ -13,7 +13,7 @@ before_script:
 python_lint:
   stage: test
   script:
-    - pylint shipup-s3-transfer.py
+    - pylint shipup_s3_transfer.py
 
 run_transfer_s3:
   stage: deploy
@@ -23,4 +23,4 @@ run_transfer_s3:
     HOST: $SFTP_HOST
     BUCKET_NAME: $S3_BUCKET_DESTINATION
   script:
-    - python3 shipup-s3-transfer.py
+    - python3 shipup_s3_transfer.py

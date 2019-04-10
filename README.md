@@ -1,5 +1,7 @@
 # Shipup SFTP Transfer to S3
 
+![coverage](https://example.gitlab.com/evesleep/shipup-sftp-s3/badges/master/pipeline.svg)
+
 This repository contains a Python 3 script that connects to the shipup SFTP server and copies the latest CSV reports (France and UK) to an AWS S3 bucket. It grabs the latest CSV reports and archives the files on the SFTP server once the transfer to S3 is complete. It also cleans up the local CSV reports.
 
 ## Why
