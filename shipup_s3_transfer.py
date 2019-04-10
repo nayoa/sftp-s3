@@ -24,7 +24,7 @@ def main():
 def connect_to_sftp(directory):
     """
     Connects to sftp server using local environment variables
-    """ 
+    """
 
     hostname = os.environ['HOST']
     username = os.environ['USER']
@@ -37,7 +37,7 @@ def connect_to_sftp(directory):
 
     get_csv_files(sftp, directory)
 
-        
+
 def get_csv_files(sftp, directory):
     """
     Copies the reports from the 'reports' directory on the SFTP server.
@@ -85,7 +85,7 @@ def cleanup(directory):
     Remove local directory with CSV reports
     """
 
-    try: 
+    try:
         shutil.rmtree(directory)
         print("Clean up complete")
     except ValueError as err:
@@ -93,17 +93,16 @@ def cleanup(directory):
         print(err.args)
 
 
-# def archive(sftp):]
-        # """
-        # Archive reports copied to S3 on SFTP server
-        # """
-#     for filename in sftp.listdir('reports'):
-#         new_path = 'archive' + '/' + filename
-#         sftp.rename(filename, new_path)
-#         print("Move CSV files to Archive")
-#         sftp.close()
-#     else: 
-#         print("Unable to archive")
+def archive(sftp):
+    """
+    Archive reports copied to S3 on SFTP server
+    """
+    for filename in sftp.listdir('reports'):
+        new_path = 'archive' + '/' + filename
+        sftp.rename(filename, new_path)
+        print("Move CSV files to Archive")
+        sftp.close()
+    else:
+        print("Unable to archive")
 
-# archive(sftp)
 main()
