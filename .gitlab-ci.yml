@@ -5,14 +5,26 @@ stages:
   - deploy
 
 before_script:
+  - apk add build-base
+  - apk add libffi-dev
+  - apk add openssl-dev
   - pip install -r requirements.txt
 
 python_lint:
+  only:
+    refs:
+    - master
+    - schedules
   stage: test
   script:
-    - pylint shipup-s3-transfer.py
+    - pylint shipup_s3_transfer.py
+
 
 run_transfer_s3:
+  only:
+    refs:
+    - master
+    - schedules
   stage: deploy
   variables:
     USER: $SFTP_USERNAME
@@ -20,4 +32,4 @@ run_transfer_s3:
     HOST: $SFTP_HOST
     BUCKET_NAME: $S3_BUCKET_DESTINATION
   script:
-    - python3 shipup-s3-transfer.py
+    - python3 shipup_s3_transfer.py
