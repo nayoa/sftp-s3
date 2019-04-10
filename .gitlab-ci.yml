@@ -11,11 +11,20 @@ before_script:
   - pip install -r requirements.txt
 
 python_lint:
+  only:
+    refs:
+    - master
+    - schedules
   stage: test
   script:
     - pylint shipup_s3_transfer.py
 
+
 run_transfer_s3:
+  only:
+    refs:
+    - master
+    - schedules
   stage: deploy
   variables:
     USER: $SFTP_USERNAME
