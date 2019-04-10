@@ -1,9 +1,5 @@
 image: python:3.6-alpine
 
-cache:
-  paths:
-    - .cache/pip
-
 stages:
   - test
   - deploy
@@ -16,27 +12,27 @@ before_script:
   - apk add openssh-client
   - pip install -r requirements.txt
   - eval $(ssh-agent -s)
-  - echo "$SSH_PRIVATE_KEY" | base64 -D > /dev/null
+  - echo "$SSH_PRIVATE_KEY" | base64 -d > /dev/null
   - mkdir -p ~/.ssh
   - chmod 700 ~/.ssh
   - ssh-keyscan gitlab.com >> ~/.ssh/known_hosts
   - chmod 644 ~/.ssh/known_hosts
 
 python_lint:
-  only:
-    refs:
-    - master
-    - schedules
+  # only:
+    # refs:
+    # - master
+    # - schedules
   stage: test
   script:
     - pylint shipup_s3_transfer.py
 
 
 run_transfer_s3:
-  only:
-    refs:
-    - master
-    - schedules
+  # only:
+  #   refs:
+  #   - master
+  #   - schedules
   stage: deploy
   variables:
     USER: $SFTP_USERNAME
