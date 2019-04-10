@@ -1,13 +1,5 @@
 image: python:3.6-alpine
 
-
-variables:
-    PIP_CACHE_DIR: "$CI_PROJECT_DIR/.cache/pip"
-
-cache:
-  paths:
-    - .cache/pip
-
 stages:
   - test
   - deploy
