@@ -23,19 +23,19 @@ cache:
     - pip-cache
 
 python_lint:
-  # only:
-    # refs:
-    # - master
+  only:
+    refs:
+    - master
   stage: test
   script:
     - pylint shipup_s3_transfer.py
 
 
 run_transfer_s3:
-  # only:
-  #   refs:
-  #   - master
-  #   - schedules
+  only:
+    refs:
+    - master
+    - schedules
   stage: deploy
   variables:
     USER: $SFTP_USERNAME
