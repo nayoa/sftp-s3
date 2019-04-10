@@ -5,7 +5,8 @@ The functions do the below:
 
 * Create a directory to store CSV reports
 * Connects to an SFTP server
-* Copies every file (not directory) in the 'reports' folder and copies to directory created in the main() function
+* Copies every file (not directory) in the 'reports' folder
+* Copies to directory created in the main() function
 * Uploads all the files to AWS S3
 * Delete the local copy of the directory created in the main() function
 * Moves files on SFTP server to archive folder once copied to S3
