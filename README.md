@@ -65,6 +65,8 @@ $ python3 shipup-s3-transfer.py
 * Unit tests
 * Improve the quality of Python code. e.g. Remove add classes and use different modules
 * Change the script into an ansible playbook
+* Create a custom docker base image with alpine packages and pip packages already instealled
+* How the SSH keys are handled in the pipeline
 
 ### Built With
 
