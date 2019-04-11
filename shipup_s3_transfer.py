@@ -11,15 +11,17 @@ The functions do the below:
 * Delete the local copy of the directory created in the main() function
 * Moves files on SFTP server to archive folder once copied to S3
 
-Note: The script requires local environment variables:
+Local environment variables:
 
 * HOST
 * USER
 * PASS
 * BUCKET_NAME
 """
+
 import os
 import shutil
+import sys
 import pysftp
 import boto3
 
@@ -70,14 +72,15 @@ def get_csv_files(sftp, directory):
     try:
         sftp.get_d('reports', 'transfer', preserve_mtime=True)
         print("CSV reports copied")
-        upload_file_to_s3(directory)
+        upload_file_to_s3(directory, sftp)
     except ValueError as err:
         print("Nothing to copy")
         print(err.args)
         sftp.close()
+        sys.exit(1)
 
 
-def upload_file_to_s3(directory):
+def upload_file_to_s3(directory, sftp):
     """
     List the CSV reports in the temp directory
 
@@ -94,14 +97,15 @@ def upload_file_to_s3(directory):
             local_name = local_path + '/' + directory + '/' + filename
             s3_connect.upload_file(local_name, bucket, file_key_name)
         print("Copied reports to S3 Succesfully")
-        cleanup(directory)
     except ValueError as err:
         print("Unable to copy reports to S3")
         print(err.args)
-        cleanup(directory)
+        sys.exit(1)
+
+    cleanup(directory, sftp)
 
 
-def cleanup(directory):
+def cleanup(directory, sftp):
     """
     Remove local directory with CSV reports
     """
@@ -109,9 +113,12 @@ def cleanup(directory):
     try:
         shutil.rmtree(directory)
         print("Clean up complete")
+        archive(sftp)
     except ValueError as err:
         print("Nothing to clean up")
         print(err.args)
+        sftp.close()
+        sys.exit(1)
 
 
 def archive(sftp):
@@ -119,14 +126,13 @@ def archive(sftp):
     Archive reports copied to S3 on SFTP server
     """
 
-    try:
-        for filename in sftp.listdir('reports'):
-            new_path = 'archive' + '/' + filename
-            sftp.rename(filename, new_path)
-            print("Moved CSV reports to archive")
-            sftp.close()
-    except ValueError as err:
-        print("Unable to archive")
-        print(err.args)
+    files = sftp.listdir('reports')
+
+    for filename in files:
+        if filename.startswith("periodic"):
+            local_path = '/reports/' + filename
+            new_path = '/reports/archive/' + filename
+            sftp.rename(local_path, new_path)
+            print("Copied to archive")
 
 main()
