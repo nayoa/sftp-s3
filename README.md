@@ -71,7 +71,6 @@ $ export HOST=<SFTP-HOST>
 $ export BUCKET_NAME=<SFTP-BUCKET-NAME>
 ```
 
-
 Have programmatic access to Eve's AWS account (currently Production)
 
 Export your `AWS_ACCESS_KEY_ID` and `AWS_SECRET_ACCESS_KEY` of the AWS account you want to upload the CSV reports to.
@@ -111,7 +110,7 @@ $ python3 shipup_s3_transfer.py
 ### Potential Improvements
 
 * Unit tests
-* Improve the quality of Python code. e.g. Remove add classes and use different modules
+* Improve the quality of Python code. e.g. Add classes and use different modules
 * Change the script into an ansible playbook
 * Create a custom docker base image with alpine packages and pip packages already instealled
 
