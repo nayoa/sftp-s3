@@ -17,10 +17,6 @@ cache:
     - pip-cache
 
 python_lint:
-  only:
-    refs:
-    - master
-    - schedules
   stage: test
   script:
     - pylint shipup_s3_transfer.py
