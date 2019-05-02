@@ -10,7 +10,12 @@ This repository contains a Python 3 script that connects to the shipup SFTP serv
 
 ### Prerequisites
 
-**Note:** 
+<details>
+  <summary>
+   What to install to use the module locally
+  </summary>
+
+**Note:**
 
 * It is assumed that you are running MacOS and using [homebrew](https://brew.sh/) for installing packages.
 * If you are using [zsh](https://ohmyz.sh/), echo the path and copy the virtualenv configuratrion into `~/.zshrc` instead of `~/.bashrc`.
@@ -94,6 +99,7 @@ You can then check your CLI is using the correct credentials by doing:
 ```shell
 $ aws sts get-caller-identity
 ```
+</details>
 
 ## Run the tests
 
@@ -112,7 +118,7 @@ $ python3 shipup_s3_transfer.py
 * Unit tests
 * Improve the quality of Python code. e.g. Add classes and use different modules
 * Change the script into an ansible playbook
-* Create a custom docker base image with alpine packages and pip packages already instealled
+* Create a custom docker base image with alpine packages and pip packages already installed
 
 ### Built With
 
