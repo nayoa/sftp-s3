@@ -1,12 +1,6 @@
-# Shipup SFTP Transfer to S3
+# SFTP Transfer to S3
 
-![coverage](https://gitlab.com/evesleep/shipup-sftp-s3/badges/master/pipeline.svg)
-
-This repository contains a Python 3 script that connects to the shipup SFTP server and copies the latest CSV reports (France and UK) to an AWS S3 bucket. It grabs the latest CSV reports and archives the files on the SFTP server once the transfer to S3 is complete. It also cleans up the local CSV reports.
-
-## Why
-
-[shipup](https://www.shipup.co/) sends daily reports in CSV format to an SFTP server. We then want to analyse the reports in Big Query. In order to do this, the reports are sent to AWS S3 where a FiveTran Connection is set up to forward the data to Big Query. This repository automates the process of sending the reports to Amazon S3 and uses [gitlab-ci](.gitlab-ci.yml) to schedule the script to run at 2 am.
+This repository contains a Python 3 script that connects to the shipup SFTP server and copies the latest CSV reports to an AWS S3 bucket. It grabs the latest CSV reports and archives the files on the SFTP server once the transfer to S3 is complete. It also cleans up the local CSV reports.
 
 ### Prerequisites
 
